@@ -6,16 +6,13 @@ let sessionStartTime = sessionStorage.getItem('sessionStartTime')
     : Date.now();
 sessionStorage.setItem('sessionStartTime', sessionStartTime);
 
-// Mock city data (replace with a real dataset or API)
 const countryCities = {
     US: ['New York', 'Los Angeles', 'Chicago'],
     GB: ['London', 'Manchester', 'Birmingham'],
-    IN: ['Mumbai', 'Delhi', 'Bangalore'],
-    UA: ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv', 'Dnipro'] // Added Ukraine
-    // Add more countries as needed
+    UA: ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv', 'Dnipro', 'Ivano-Frankivsk', 'Vinnytsia', 'Poltava', 'Sumy', 'Chernihiv', 'Zhytomyr', 'Rivne', 'Lutsk', 'Chernivtsi', 'Ternopil'],
 };
 
-// DOM elements
+
 const elements = {
     countrySelect: document.getElementById('country-select'),
     citySelect: document.getElementById('city-select'),
@@ -26,14 +23,14 @@ const elements = {
     apiCalls: document.getElementById('api-calls-left')
 };
 
-// Display error message
+
 function displayError(message) {
     elements.weatherInfo.innerHTML = `
         <p class="error-message" style="color: red;">Error: ${message}</p>
     `;
 }
 
-// Timer function
+
 function startSessionTimer() {
     setInterval(() => {
         const timeElapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
@@ -44,7 +41,7 @@ function startSessionTimer() {
     }, 1000);
 }
 
-// API call counter
+
 function updateApiCallsCounter() {
     if (apiCallsLeft <= 0) {
         displayError('API call limit reached!');
@@ -55,7 +52,7 @@ function updateApiCallsCounter() {
     return true;
 }
 
-// Loading state
+
 function showLoading() {
     elements.weatherInfo.innerHTML = '<p>Loading...</p>';
     elements.searchButton.disabled = true;
@@ -65,7 +62,7 @@ function hideLoading() {
     elements.searchButton.disabled = false;
 }
 
-// Fetch countries
+
 async function loadCountries() {
     try {
         const response = await fetch('https://restcountries.com/v3.1/all');
@@ -84,7 +81,7 @@ async function loadCountries() {
     }
 }
 
-// Fetch weather data
+
 async function getWeatherData(city) {
     if (!navigator.onLine) {
         displayError('You are offline. Please check your internet connection.');
@@ -112,7 +109,7 @@ async function getWeatherData(city) {
     }
 }
 
-// Display weather data
+
 function displayWeather(data) {
     if (!data) return;
     elements.weatherInfo.innerHTML = `
@@ -124,7 +121,7 @@ function displayWeather(data) {
     `;
 }
 
-// Load cities for a given country code
+
 function loadCities(countryCode) {
     elements.citySelect.innerHTML = '<option value="">Select City</option>';
     const cities = countryCities[countryCode] || [];
@@ -140,12 +137,12 @@ function loadCities(countryCode) {
     });
 }
 
-// Validate city name
+
 function isValidCityName(city) {
     return /^[a-zA-Z\s\-]+$/.test(city);
 }
 
-// Fetch and display weather
+
 async function fetchAndDisplayWeather(city) {
     if (!city) {
         displayError('Please enter or select a city.');
@@ -159,9 +156,8 @@ async function fetchAndDisplayWeather(city) {
     displayWeather(weatherData);
 }
 
-// Event listeners
+
 function initializeApp() {
-    // Validate DOM elements
     const requiredElements = [
         'countrySelect',
         'citySelect',
